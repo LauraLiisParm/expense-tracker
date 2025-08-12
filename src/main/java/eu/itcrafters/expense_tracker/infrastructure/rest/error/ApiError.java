@@ -1,4 +1,4 @@
-package eu.itcrafters.myproject.infrastructure.rest.error;
+package eu.itcrafters.expense_tracker.infrastructure.rest.error;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package eu.itcrafters.myproject.infrastructure.rest.exception;
+package eu.itcrafters.expense_tracker.infrastructure.rest.exception;
 
 import lombok.Getter;
 

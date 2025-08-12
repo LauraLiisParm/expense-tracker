@@ -1,4 +1,4 @@
-package eu.itcrafters.myproject.infrastructure.db;
+package eu.itcrafters.expense_tracker.infrastructure.db;
 
 import org.hsqldb.server.Server;
 import org.slf4j.Logger;

@@ -4,13 +4,13 @@
 -- tables
 -- Table: budget
 CREATE TABLE budget (
-    budget_id int  NOT NULL,
-    category_id int  NOT NULL,
-    "month" date  NOT NULL,
-    "year" smallint  NOT NULL,
-    budget_amount decimal(10,2)  NOT NULL,
-    expense_amount decimal(10,2)  NULL DEFAULT 0,
-    created_at timestamp  NULL DEFAULT current_timestamp,
+    budget_id INT NOT NULL,
+    category_id INT NOT NULL,
+    month_value DATE NOT NULL,
+    year_value SMALLINT NOT NULL,
+    budget_amount DECIMAL(10,2) NOT NULL,
+    expense_amount DECIMAL(10,2) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT budget_pk PRIMARY KEY (budget_id)
 );
 

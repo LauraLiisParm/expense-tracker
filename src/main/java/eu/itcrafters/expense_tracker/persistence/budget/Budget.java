@@ -1,49 +1,40 @@
 package eu.itcrafters.expense_tracker.persistence.budget;
 
-import eu.itcrafters.expense_tracker.persistence.expense.Category;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "BUDGET")
 public class Budget {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BUDGET_ID", nullable = false)
-    private Integer id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CATEGORY_ID", nullable = false)
-    private Category category;
+    private Integer amount;
+    private String description;
+    private String category;
 
-    @NotNull
-    @Column(name = "BUDGET_MONTH", nullable = false)
-    private LocalDate budgetMonth;
+    public Integer getAmount() {
+        return amount;
+    }
 
-    @NotNull
-    @Column(name = "BUDGET_YEAR", nullable = false)
-    private Short budgetYear;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
 
-    @NotNull
-    @Column(name = "BUDGET_AMOUNT", nullable = false, precision = 10, scale = 2)
-    private BigDecimal budgetAmount;
+    public String getDescription() {
+        return description;
+    }
 
-    @ColumnDefault("0.00")
-    @Column(name = "EXPENSE_AMOUNT", precision = 10, scale = 2)
-    private BigDecimal expenseAmount;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "CREATED_AT")
-    private Instant createdAt;
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

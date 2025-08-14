@@ -17,7 +17,7 @@ public class BudgetDto implements Serializable {
 
     @NotNull
     @Positive
-    private BigDecimal amount;
+    private Integer amount;
 
     @NotNull
     @Size(min = 1)

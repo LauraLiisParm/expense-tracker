@@ -6,7 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Error {
-    SOME_ERROR_ENUM("Some error message");
+    RESOURCE_NOT_FOUND("Some error message"),
+    BUDGET_EXISTS("Budget already exists");
 
     private final String message;
 }

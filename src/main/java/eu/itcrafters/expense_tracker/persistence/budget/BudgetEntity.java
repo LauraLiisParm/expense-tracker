@@ -1,6 +1,6 @@
 package eu.itcrafters.expense_tracker.persistence.budget;
 
-import eu.itcrafters.expense_tracker.persistence.expense.Category;
+import eu.itcrafters.expense_tracker.persistence.category.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -45,6 +45,7 @@ public class BudgetEntity {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "CREATED_AT")
     private Instant createdAt;
+
 
     public Integer getId() {
         return id;
@@ -101,4 +102,5 @@ public class BudgetEntity {
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
+
 }

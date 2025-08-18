@@ -1,4 +1,4 @@
-package eu.itcrafters.expense_tracker.persistence.expense;
+package eu.itcrafters.expense_tracker.persistence.category;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

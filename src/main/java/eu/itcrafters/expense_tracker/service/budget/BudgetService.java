@@ -4,62 +4,63 @@ import eu.itcrafters.expense_tracker.infrastructure.rest.exception.DataNotFoundE
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetEntity;
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetMapper;
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetRepository;
-import eu.itcrafters.expense_tracker.persistence.expense.Category;
+import eu.itcrafters.expense_tracker.persistence.category.Category;
+import eu.itcrafters.expense_tracker.persistence.category.CategoryRepository;
 import eu.itcrafters.expense_tracker.service.budget.dto.BudgetDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
-import static eu.itcrafters.myproject.infrastructure.rest.error.Error.BUDGET_EXISTS;
+import java.time.LocalDate;
 
 
 @Service
 @RequiredArgsConstructor
 public class BudgetService {
 
-        private final BudgetRepository budgetRepository;
-        private final BudgetMapper budgetMapper;
+    private final BudgetRepository budgetRepository;
+    private final BudgetMapper budgetMapper;
+    private final CategoryRepository categoryRepository;
 
-    public void addBudget(BudgetDto budgetDto) {
-            ensureNewBudget(budgetDto);
-            BudgetEntity budgetEntity = createBudget(budgetDto);
-            budgetRepository.save(budgetEntity);
-        }
+    public void addBudget(@Valid BudgetDto budgetDto) {
+        validateBudget(budgetDto);
+        ensureNewBudget(budgetDto);
 
-        private void ensureNewBudget(BudgetDto budgetDto) {
-            if (budgetRepository.budgetExistsBy(
-                    BigDecimal.valueOf(budgetDto.getAmount()),
-                    budgetDto.getName())) {
-                throw new DataNotFoundException(BUDGET_EXISTS.getMessage());
-            }
-        }
+        BudgetEntity entity = budgetMapper.toBudgetEntity(budgetDto);
 
-        private BudgetEntity createBudget(BudgetDto budgetDto) {
-            BudgetEntity budgetEntity = budgetMapper.toBudgetEntity(budgetDto);
-            addAmountToBudget(BigDecimal.valueOf(budgetDto.getAmount()), budgetEntity);
-            addNameToBudget(budgetDto.getName(), budgetEntity);
-            return budgetEntity;
-        }
+        // Fix: ensure category exists before saving
+        Category category = categoryRepository.findByName(budgetDto.getName())
+                .orElseGet(() -> {
+                    Category newCategory = new Category();
+                    newCategory.setName(budgetDto.getName().trim());
+                    newCategory.setDescription(budgetDto.getDescription());
+                    return categoryRepository.save(newCategory);
+                });
 
-        private void addAmountToBudget(BigDecimal amount, BudgetEntity budgetEntity) {
-            if (amount != null && amount.compareTo(BigDecimal.ZERO) >= 0) {
-                budgetEntity.setBudgetAmount(amount);
-            } else {
-                throw new IllegalArgumentException("Amount must be non-negative");
-            }
-        }
+        entity.setCategory(category);
 
-        private void addNameToBudget(String categoryName, BudgetEntity budgetEntity) {
-            if (categoryName != null && !categoryName.trim().isEmpty()) {
-                Category category = budgetEntity.getCategory();
-                if (category == null) {
-                    category = new Category();
-                    budgetEntity.setCategory(category);
-                }
-                category.setName(categoryName.trim()); // Category must have setName()
-            } else {
-                throw new IllegalArgumentException("Category name cannot be empty");
-            }
+        entity.setBudgetMonth(LocalDate.now().withDayOfMonth(1));
+        entity.setBudgetYear((short) LocalDate.now().getYear());
+
+        budgetRepository.save(entity);
+    }
+
+    private void ensureNewBudget(BudgetDto budgetDto) {
+        if (budgetRepository.budgetExistsBy(
+                budgetDto.getAmount(),
+                budgetDto.getName())) {
+            throw new DataNotFoundException("Budget with this amount and category already exists");
         }
     }
+
+    private void validateBudget(BudgetDto budgetDto) {
+        if (budgetDto.getAmount() == null || budgetDto.getAmount() < 0) {
+            throw new IllegalArgumentException("Amount must be a non-negative integer");
+        }
+        if (budgetDto.getName() == null || budgetDto.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be empty");
+        }
+    }
+}
+
+

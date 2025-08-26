@@ -1,4 +1,4 @@
-package eu.itcrafters.expense_tracker.service.budget.dto;
+package eu.itcrafters.expense_tracker.controller.budget.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

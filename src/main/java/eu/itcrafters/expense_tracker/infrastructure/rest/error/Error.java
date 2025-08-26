@@ -1,4 +1,4 @@
-package eu.itcrafters.myproject.infrastructure.rest.error;
+package eu.itcrafters.expense_tracker.infrastructure.rest.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Error {
-    RESOURCE_NOT_FOUND("Some error message"),
+    BUDGET_NOT_FOUND("Budget does not exist"),
     BUDGET_EXISTS("Budget already exists");
 
     private final String message;

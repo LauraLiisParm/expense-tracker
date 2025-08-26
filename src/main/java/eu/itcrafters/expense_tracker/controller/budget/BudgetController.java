@@ -1,8 +1,9 @@
 package eu.itcrafters.expense_tracker.controller.budget;
 
+import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetInfo;
 import eu.itcrafters.expense_tracker.infrastructure.rest.error.ApiError;
 import eu.itcrafters.expense_tracker.service.budget.BudgetService;
-import eu.itcrafters.expense_tracker.service.budget.dto.BudgetDto;
+import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,10 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -36,5 +36,46 @@ public class BudgetController {
         budgetService.addBudget(budgetDto);
     }
 
+    @GetMapping("/budget/{budgetId}")
+    @Operation(summary = "Finds a budget by its ID", description = "Finds a budget by its ID, if no match is found then error is thrown")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Budget does not exist",
+                    content = @Content(schema = @Schema(implementation = ApiError.class))),
+    })
+    public BudgetDto findBudget(@PathVariable Integer budgetId) {
+        return budgetService.findBudget(budgetId);
+    }
+
+    @GetMapping("/budgets")
+    @Operation(summary = "Finds all budgets")
+    public List<BudgetInfo> findAllBudgets() {
+        return budgetService.findAllBudgets();
+    }
+
+    @PutMapping("/budget/{budgetId}")
+    @Operation(summary = "Updates a budget", description = "If there are any null value fields, those won't get updated")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body: payload validation failed",
+                    content = @Content(schema = @Schema(implementation = ApiError.class))),
+            @ApiResponse(responseCode = "404", description = "Budget does not exit / BudgetType not found",
+                    content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    public void updateBudget(@PathVariable Integer budgetId, @RequestBody @Valid BudgetDto budgetDto) {
+        budgetService.updateBudget(budgetId, budgetDto);
+    }
+
+    @DeleteMapping("/budget/{budgetId}")
+    @Operation(summary = "Deletes a budget by its ID",
+            description = "Also checks if any record exist with this budget. If yes, record is deleted")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Budget does not exist",
+                    content = @Content(schema = @Schema(implementation = ApiError.class))),
+    })
+    public void deleteBudget(@PathVariable Integer budgetId) {
+        budgetService.deleteBudget(budgetId);
+    }
 
 }

@@ -9,12 +9,13 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface BudgetRepository extends JpaRepository<BudgetEntity, Integer> {
-
+    /*
     @Query("""
-        select (count(c) > 0) from budget c
-            where c.budgetAmount = :amount and c.category.name = :name
+        select (count(c) > 0) from budgets c
+            where c.budgetAmount = :amount and c.categoryEntity.name = :name
         """)
-    boolean budgetExistsBy(Integer amount, String name);
+    boolean existsByCategoryIdAndBudgetAmount(Integer categoryId, BigDecimal budgetAmount);
 
-    Optional<BudgetEntity> findByCategoryNameAndBudgetAmount(String categoryName, Integer budgetAmount);
+    Optional<BudgetEntity> findByCategoryIdAndBudgetAmount(Integer categoryId, BigDecimal budgetAmount);
+*/
 }

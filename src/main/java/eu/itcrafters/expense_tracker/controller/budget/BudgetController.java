@@ -1,10 +1,8 @@
 package eu.itcrafters.expense_tracker.controller.budget;
 
-import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetInfo;
 import eu.itcrafters.expense_tracker.infrastructure.rest.error.ApiError;
-import eu.itcrafters.expense_tracker.persistence.budget.Budget;
-import eu.itcrafters.expense_tracker.persistence.budget.BudgetEntity;
-import eu.itcrafters.expense_tracker.persistence.budget.BudgetMapper;
+import eu.itcrafters.expense_tracker.model.budget.Budget;
+import eu.itcrafters.expense_tracker.mapper.budget.BudgetMapper;
 import eu.itcrafters.expense_tracker.service.budget.BudgetService;
 import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,8 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")

@@ -13,11 +13,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Budget Management", description = "Operations related to budget management")
 
 public class BudgetController {
@@ -33,6 +35,7 @@ public class BudgetController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     public void addBudget(@RequestBody @Valid BudgetDto budgetDto) {
+        log.info("Recieved budgetAdd request: "+budgetDto);
         Budget budget = budgetMapper.toBudget(budgetDto);
         budgetService.addBudget(budget);
     }

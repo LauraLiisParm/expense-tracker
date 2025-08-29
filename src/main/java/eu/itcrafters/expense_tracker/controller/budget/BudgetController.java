@@ -2,6 +2,9 @@ package eu.itcrafters.expense_tracker.controller.budget;
 
 import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetInfo;
 import eu.itcrafters.expense_tracker.infrastructure.rest.error.ApiError;
+import eu.itcrafters.expense_tracker.persistence.budget.Budget;
+import eu.itcrafters.expense_tracker.persistence.budget.BudgetEntity;
+import eu.itcrafters.expense_tracker.persistence.budget.BudgetMapper;
 import eu.itcrafters.expense_tracker.service.budget.BudgetService;
 import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +27,7 @@ import java.util.List;
 public class BudgetController {
 
     private final BudgetService budgetService;
+    private final BudgetMapper budgetMapper;
 
     @PostMapping("/budget")
     @Operation(summary = "Adds a new budget to the system", description = "Accepts a BudgetDto object and saves it to the database")
@@ -33,9 +37,11 @@ public class BudgetController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     public void addBudget(@RequestBody @Valid BudgetDto budgetDto) {
-        budgetService.addBudget(budgetDto);
+        Budget budget = budgetMapper.toBudget(budgetDto);
+        budgetService.addBudget(budget);
     }
 
+    /*
     @GetMapping("/budget/{budgetId}")
     @Operation(summary = "Finds a budget by its ID", description = "Finds a budget by its ID, if no match is found then error is thrown")
     @ApiResponses(value = {
@@ -43,7 +49,7 @@ public class BudgetController {
             @ApiResponse(responseCode = "404", description = "Budget does not exist",
                     content = @Content(schema = @Schema(implementation = ApiError.class))),
     })
-    public BudgetDto findBudget(@PathVariable Integer budgetId) {
+    public BudgetEntity findBudget(@PathVariable Integer budgetId) {
         return budgetService.findBudget(budgetId);
     }
 
@@ -77,5 +83,7 @@ public class BudgetController {
     public void deleteBudget(@PathVariable Integer budgetId) {
         budgetService.deleteBudget(budgetId);
     }
+
+     */
 
 }

@@ -11,10 +11,12 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BudgetMapper {
+    BudgetEntity toBudgetEntity(BudgetDto dto);
+
     @Mapping(source = "amount", target = "budgetAmount")
     @Mapping(target = "category", ignore = true) // ignore automatic mapping
     @Mapping(target = "id", ignore = true)
-    BudgetEntity toBudgetEntity(BudgetDto dto);
+    BudgetEntity toBudgetEntity(Budget budget);
 
     @AfterMapping
     default void mapCategory(BudgetDto dto, @MappingTarget BudgetEntity entity) {
@@ -32,11 +34,17 @@ public interface BudgetMapper {
 
     List<BudgetInfo> toBudgetInfos(List<Budget> budgets);
 
-    @Mapping(source = "budgetAmount", target = "amount")
+  /*  @Mapping(source = "budgetAmount", target = "amount")
     @Mapping(source = "category", target = "category")
     Budget toBudget(BudgetEntity budgetEntity);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+   */
+
+    Budget toBudget(BudgetDto budgetDto);
+
+ /*   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @InheritConfiguration(name = "toBudget")
     Budget updateBudget(BudgetEntity budgetEntity, @MappingTarget Budget budget);
+
+  */
 }

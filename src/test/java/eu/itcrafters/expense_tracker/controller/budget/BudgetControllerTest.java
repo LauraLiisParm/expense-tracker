@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -29,7 +30,7 @@ class BudgetControllerTest {
     private BudgetRepository budgetRepository;
 
     @Test
-    public void givenValidUserInputNewBudgetGetsSavedIntoDatabase() throws Exception {
+    void givenValidUserInputNewBudgetGetsSavedIntoDatabase() throws Exception {
         String userInput = """
                 {
                     "amount": 100,
@@ -38,12 +39,9 @@ class BudgetControllerTest {
                 }
                 """;
 
-        var request = MockMvcRequestBuilders.post("/api/v1/budget")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(userInput);
+        var request = mockAddBudgetEndpointRequest(userInput);
 
-        mockMvc.perform(request)
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        performRequest(request);
 
         Optional<BudgetEntity> userAddedBudget = budgetRepository.findByBudgetName("Cat");
         Assertions.assertFalse(userAddedBudget.isEmpty());
@@ -51,9 +49,48 @@ class BudgetControllerTest {
         Assertions.assertEquals(BigDecimal.valueOf(100), userAddedBudgetAmount);
     }
 
-    @Test
-    public void givenValidUserInputNewBudgetGetsAddedToTheExistingBudget() throws Exception {
+    private void performRequest(MockHttpServletRequestBuilder request) throws Exception {
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
 
+    private static MockHttpServletRequestBuilder mockAddBudgetEndpointRequest(String userInput) {
+        return MockMvcRequestBuilders.post("/api/v1/budget")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userInput);
+    }
+
+    @Test
+    void givenValidUserInputNewBudgetGetsAddedToTheExistingBudget() throws Exception {
+        String userInput = """
+                {
+                    "amount": 100,
+                    "name": "Cat",
+                    "description": "Cat food"
+                }
+                """;
+
+        String userInput2 = """
+                {
+                    "amount": 100,
+                    "name": "Cat",
+                    "description": "Cat food"
+                }
+                """;
+
+        var request = mockAddBudgetEndpointRequest(userInput);
+        performRequest(request);
+
+        Optional<BudgetEntity> userAddedBudget = budgetRepository.findByBudgetName("Cat");
+        Assertions.assertFalse(userAddedBudget.isEmpty());
+        BigDecimal userAddedBudgetAmount = userAddedBudget.get().getBudgetAmount();
+        Assertions.assertEquals(BigDecimal.valueOf(100), userAddedBudgetAmount);
+
+        var request2 = mockAddBudgetEndpointRequest(userInput2);
+        performRequest(request2);
+        Optional<BudgetEntity> userAddedBudget2 = budgetRepository.findByBudgetName("Cat");
+        BigDecimal userAddedBudgetAmount2 = userAddedBudget2.get().getBudgetAmount();
+        Assertions.assertEquals(BigDecimal.valueOf(200), userAddedBudgetAmount2);
     }
 
 }

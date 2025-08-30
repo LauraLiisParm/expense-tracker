@@ -13,5 +13,7 @@ public interface BudgetRepository extends JpaRepository<BudgetEntity, Integer> {
             """, nativeQuery = true)
     Optional<BudgetEntity> findByBudgetName(String budgetName);
 
+    Optional<BudgetEntity> findById(Integer id);
+
 
 }

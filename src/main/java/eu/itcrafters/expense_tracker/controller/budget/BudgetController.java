@@ -1,5 +1,6 @@
 package eu.itcrafters.expense_tracker.controller.budget;
 
+import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetInfo;
 import eu.itcrafters.expense_tracker.infrastructure.rest.error.ApiError;
 import eu.itcrafters.expense_tracker.model.budget.Budget;
 import eu.itcrafters.expense_tracker.mapper.budget.BudgetMapper;
@@ -15,6 +16,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,12 +38,12 @@ public class BudgetController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     public void addBudget(@RequestBody @Valid BudgetDto budgetDto) {
-        log.info("Recieved budgetAdd request: "+budgetDto);
+        log.info("Received budgetAdd request: " + budgetDto);
         Budget budget = budgetMapper.toBudget(budgetDto);
         budgetService.addBudget(budget);
     }
 
-    /*
+
     @GetMapping("/budget/{budgetId}")
     @Operation(summary = "Finds a budget by its ID", description = "Finds a budget by its ID, if no match is found then error is thrown")
     @ApiResponses(value = {
@@ -48,16 +51,20 @@ public class BudgetController {
             @ApiResponse(responseCode = "404", description = "Budget does not exist",
                     content = @Content(schema = @Schema(implementation = ApiError.class))),
     })
-    public BudgetEntity findBudget(@PathVariable Integer budgetId) {
+    public Budget findBudget(@PathVariable Integer budgetId) {
+        log.info("Received findBudget request: " + budgetId);
         return budgetService.findBudget(budgetId);
     }
 
     @GetMapping("/budgets")
     @Operation(summary = "Finds all budgets")
     public List<BudgetInfo> findAllBudgets() {
-        return budgetService.findAllBudgets();
+        List<Budget> budgets = budgetService.findAllBudgets();
+        return budgetMapper.toBudgetInfoList(budgets);
     }
 
+
+ /*
     @PutMapping("/budget/{budgetId}")
     @Operation(summary = "Updates a budget", description = "If there are any null value fields, those won't get updated")
     @ApiResponses(value = {

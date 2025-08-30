@@ -1,15 +1,18 @@
 package eu.itcrafters.expense_tracker.service.budget;
 
+import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetDto;
 import eu.itcrafters.expense_tracker.model.budget.Budget;
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetEntity;
 import eu.itcrafters.expense_tracker.mapper.budget.BudgetMapper;
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -38,6 +41,22 @@ public class BudgetService {
         }
         log.info("Budget adding completed");
     }
+
+
+    public Budget findBudget(Integer budgetId) {
+        log.info("Looking for budget with id: {}", budgetId);
+        return budgetRepository.findById(budgetId)
+                .map(budgetMapper::toBudget)
+                .orElseThrow(() -> new EntityNotFoundException("Budget not found with id: " + budgetId));
+    }
+
+
+    public List<Budget> findAllBudgets() {
+        List<BudgetEntity> entities = budgetRepository.findAll();
+        return budgetMapper.toBudgetList(entities);
+
+    }
+
 
     private void addAmountToExistingBudget(Budget budget, Optional<BudgetEntity> existingBudget) {
         BudgetEntity existing = existingBudget.get();

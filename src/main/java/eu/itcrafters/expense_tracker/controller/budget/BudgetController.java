@@ -59,6 +59,7 @@ public class BudgetController {
     @GetMapping("/budgets")
     @Operation(summary = "Finds all budgets")
     public List<BudgetInfo> findAllBudgets() {
+        log.info("Received findAllBudgets request");
         List<Budget> budgets = budgetService.findAllBudgets();
         return budgetMapper.toBudgetInfoList(budgets);
     }

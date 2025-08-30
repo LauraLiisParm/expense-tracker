@@ -44,7 +44,7 @@ public class BudgetService {
 
 
     public Budget findBudget(Integer budgetId) {
-        log.info("Looking for budget with id: {}", budgetId);
+        log.info("Looking for budget with id: " + budgetId);
         return budgetRepository.findById(budgetId)
                 .map(budgetMapper::toBudget)
                 .orElseThrow(() -> new EntityNotFoundException("Budget not found with id: " + budgetId));
@@ -52,9 +52,17 @@ public class BudgetService {
 
 
     public List<Budget> findAllBudgets() {
-        List<BudgetEntity> entities = budgetRepository.findAll();
-        return budgetMapper.toBudgetList(entities);
+        log.info("Looking for all budgets in repository");
 
+        log.info("Looking budget entities");
+        List<BudgetEntity> entities = budgetRepository.findAll();
+
+
+        log.info("Mapping budget entities to models");
+        List<Budget> budgets = budgetMapper.toBudgetList(entities);
+
+        log.info("Returning all budgets");
+        return budgets;
     }
 
 

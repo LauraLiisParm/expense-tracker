@@ -14,6 +14,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class BudgetDto implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @NotNull
     @Positive
     private Integer amount;

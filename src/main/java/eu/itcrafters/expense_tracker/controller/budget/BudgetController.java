@@ -38,7 +38,7 @@ public class BudgetController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     public void addBudget(@RequestBody @Valid BudgetDto budgetDto) {
-        log.info("Received budgetAdd request: " + budgetDto);
+        log.info("Received budgetAdd request: {}", budgetDto);
         Budget budget = budgetMapper.toBudget(budgetDto);
         budgetService.addBudget(budget);
     }
@@ -52,7 +52,7 @@ public class BudgetController {
                     content = @Content(schema = @Schema(implementation = ApiError.class))),
     })
     public Budget findBudget(@PathVariable Integer budgetId) {
-        log.info("Received findBudget request: " + budgetId);
+        log.info("Received findBudget request: {}", budgetId);
         return budgetService.findBudget(budgetId);
     }
 

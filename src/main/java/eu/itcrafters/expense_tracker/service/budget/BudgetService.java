@@ -1,8 +1,7 @@
 package eu.itcrafters.expense_tracker.service.budget;
 
-import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetDto;
 import eu.itcrafters.expense_tracker.infrastructure.rest.exception.DataNotFoundException;
-import eu.itcrafters.expense_tracker.infrastructure.rest.error.Error;
+import eu.itcrafters.expense_tracker.infrastructure.rest.error.ErrorCode;
 import eu.itcrafters.expense_tracker.model.budget.Budget;
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetEntity;
 import eu.itcrafters.expense_tracker.mapper.budget.BudgetMapper;
@@ -46,7 +45,7 @@ public class BudgetService {
 
 
     public Budget findBudget(Integer budgetId) {
-        log.info("Looking for budget with id: " + budgetId);
+        log.info("Looking for budget with id: {}", budgetId);
         return budgetRepository.findById(budgetId)
                 .map(budgetMapper::toBudget)
                 .orElseThrow(() -> new EntityNotFoundException("Budget not found with id: " + budgetId));
@@ -69,27 +68,27 @@ public class BudgetService {
 
 
     public void updateBudget(Integer budgetId, Budget budget) {
-        log.info("Looking for budget with id: " + budgetId);
+        log.info("Looking for budget with id: {}", budgetId);
 
         Optional<BudgetEntity> existingBudget = budgetRepository.findById(budgetId);
 
         if (existingBudget.isEmpty()) {
-            log.info("Budget with id" + budgetId + "not found, cannot update");
-            throw new DataNotFoundException(Error.BUDGET_NOT_FOUND.getMessage());
+            log.info("Budget with id {} not found, cannot update", budgetId);
+            throw new DataNotFoundException(ErrorCode.BUDGET_NOT_FOUND.getMessage());
         }
 
         log.info("Found existing budget, updating fields");
         updateExistingBudget(budget, existingBudget.get());
 
-        log.info("Budget update completed for id: " + budgetId);
+        log.info("Budget update completed for id: {}", budgetId);
     }
 
 
     public void deleteBudget(Integer budgetId) {
-        log.info("Looking for budget with id: " + budgetId);
+        log.info("Looking for budget with id: {}", budgetId);
         BudgetEntity budget = budgetRepository.findById(budgetId)
-                . orElseThrow(() -> new DataNotFoundException(Error.BUDGET_NOT_FOUND.getMessage()));
-        log.info("Deleting budget with id: " + budgetId);
+                . orElseThrow(() -> new DataNotFoundException(ErrorCode.BUDGET_NOT_FOUND.getMessage()));
+        log.info("Deleting budget with id: {}", budgetId);
         budgetRepository.delete(budget);
     }
 

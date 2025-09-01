@@ -80,8 +80,8 @@ public class BudgetController {
         budgetService.updateBudget(budgetId, budget);
     }
 
-    
-    /*
+
+
     @DeleteMapping("/budget/{budgetId}")
     @Operation(summary = "Deletes a budget by its ID",
             description = "Also checks if any record exist with this budget. If yes, record is deleted")
@@ -94,6 +94,5 @@ public class BudgetController {
         budgetService.deleteBudget(budgetId);
     }
 
-     */
 
 }

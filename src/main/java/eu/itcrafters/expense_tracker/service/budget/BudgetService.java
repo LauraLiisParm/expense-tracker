@@ -82,8 +82,17 @@ public class BudgetService {
         updateExistingBudget(budget, existingBudget.get());
 
         log.info("Budget update completed for id: " + budgetId);
-
     }
+
+
+    public void deleteBudget(Integer budgetId) {
+        log.info("Looking for budget with id: " + budgetId);
+        BudgetEntity budget = budgetRepository.findById(budgetId)
+                . orElseThrow(() -> new DataNotFoundException(Error.BUDGET_NOT_FOUND.getMessage()));
+        log.info("Deleting budget with id: " + budgetId);
+        budgetRepository.delete(budget);
+    }
+
 
     private void updateExistingBudget(Budget budget, BudgetEntity existing) {
         existing.setBudgetName(budget.getBudgetName());
@@ -103,10 +112,12 @@ public class BudgetService {
         budgetRepository.save(existing);
     }
 
+
     private void saveNewBudget(Budget budget) {
         BudgetEntity entity = budgetMapper.toEntity(budget);
         budgetRepository.save(entity);
     }
+
 
     private static void addDatesToBudget(Budget budget) {
         LocalDate currentDate = LocalDate.now();

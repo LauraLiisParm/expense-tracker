@@ -65,7 +65,7 @@ public class BudgetController {
     }
 
 
- /*
+
     @PutMapping("/budget/{budgetId}")
     @Operation(summary = "Updates a budget", description = "If there are any null value fields, those won't get updated")
     @ApiResponses(value = {
@@ -76,9 +76,12 @@ public class BudgetController {
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     public void updateBudget(@PathVariable Integer budgetId, @RequestBody @Valid BudgetDto budgetDto) {
-        budgetService.updateBudget(budgetId, budgetDto);
+        Budget budget = budgetMapper.toBudget(budgetDto);
+        budgetService.updateBudget(budgetId, budget);
     }
 
+    
+    /*
     @DeleteMapping("/budget/{budgetId}")
     @Operation(summary = "Deletes a budget by its ID",
             description = "Also checks if any record exist with this budget. If yes, record is deleted")

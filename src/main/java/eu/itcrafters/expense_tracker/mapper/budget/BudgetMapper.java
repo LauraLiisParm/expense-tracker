@@ -8,7 +8,6 @@ import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetInfo;
 import org.mapstruct.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
@@ -39,4 +38,5 @@ public interface BudgetMapper {
     List<BudgetDto> toDtoList(List<Budget> budgets);
 
     List<BudgetInfo> toBudgetInfoList(List<Budget> budgets);
+
 }

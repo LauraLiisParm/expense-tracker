@@ -1,6 +1,8 @@
 package eu.itcrafters.expense_tracker.service.budget;
 
 import eu.itcrafters.expense_tracker.controller.budget.dto.BudgetDto;
+import eu.itcrafters.expense_tracker.infrastructure.rest.exception.DataNotFoundException;
+import eu.itcrafters.expense_tracker.infrastructure.rest.error.Error;
 import eu.itcrafters.expense_tracker.model.budget.Budget;
 import eu.itcrafters.expense_tracker.persistence.budget.BudgetEntity;
 import eu.itcrafters.expense_tracker.mapper.budget.BudgetMapper;
@@ -63,6 +65,33 @@ public class BudgetService {
 
         log.info("Returning all budgets");
         return budgets;
+    }
+
+
+    public void updateBudget(Integer budgetId, Budget budget) {
+        log.info("Looking for budget with id: " + budgetId);
+
+        Optional<BudgetEntity> existingBudget = budgetRepository.findById(budgetId);
+
+        if (existingBudget.isEmpty()) {
+            log.info("Budget with id" + budgetId + "not found, cannot update");
+            throw new DataNotFoundException(Error.BUDGET_NOT_FOUND.getMessage());
+        }
+
+        log.info("Found existing budget, updating fields");
+        updateExistingBudget(budget, existingBudget.get());
+
+        log.info("Budget update completed for id: " + budgetId);
+
+    }
+
+    private void updateExistingBudget(Budget budget, BudgetEntity existing) {
+        existing.setBudgetName(budget.getBudgetName());
+        existing.setBudgetAmount(BigDecimal.valueOf(budget.getBudgetAmount()));
+        existing.setDescription(budget.getDescription());
+
+        budgetRepository.save(existing);
+        log.info("Saved updated budget entity");
     }
 
 

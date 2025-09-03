@@ -114,11 +114,11 @@ On startup, Spring Boot will automatically run any `schema.sql` and `data.sql` f
 
 | Method | Path               | Description                              |
 | ------ | ------------------ | ---------------------------------------- |
-| GET    | `/budget/{petId}`     | Retrieve a single budget by its ID          |
+| GET    | `/budget/{budgetId}`     | Retrieve a single budget by its ID          |
 | GET    | `/budgetss`            | List all budgets                     |
 | POST   | `/budget`             | Create a new budget or add to existing one  |
-| PUT    | `/budget/{petId}`     | Update an existing budget’s details         |
-| DELETE | `/budget/{petId}`     | Delete a budget by its ID                   |
+| PUT    | `/budget/{budgetId}`     | Update an existing budget’s details         |
+| DELETE | `/budget/{budgetId}`     | Delete a budget by its ID                   |
 
 ---
 

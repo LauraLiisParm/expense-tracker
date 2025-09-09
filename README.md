@@ -73,8 +73,8 @@ cd expense-tracker
     - IntelliJ will automatically reload the Gradle project. If you encounter any issues, click the “Refresh” icon in the Gradle tool window to force a manual reload.
 
 2. **Run the application**
-    - In the **Project** tool window, navigate to `src/main/java/eu/itcrafters/petshop/PetshopApplication.java`.
-    - Click the green ▶︎ icon next to the `main` method, or right-click the file and choose **Run 'PetshopApplication'**.
+    - In the **Project** tool window, navigate to `src/main/java/eu/itcrafters/expense-tracker/ExpenseTrackerApplication.java`.
+    - Click the green ▶︎ icon next to the `main` method, or right-click the file and choose **Run 'ExpenseTrackerApplication'**.
 
 3. **Verify startup**
     - The console should show Spring Boot starting on port 8080.
